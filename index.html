@@ -22,10 +22,7 @@
                 <span id="accuracy">100% Accuracy</span>
             </div>
 
-            <div id="quote" class="quote">
-                Loading your typing passage...
-            </div>
-
+            <div id="quote" class="quote"></div>
             <textarea
                 id="input"
                 placeholder="Start typing here..."
@@ -34,6 +31,18 @@
             ></textarea>
 
             <button id="restart">New Test ↻</button>
+
+            <div id="results" class="results" hidden>
+    <h2>Test Completed!</h2>
+
+    <div class="result-stats">
+        <p>WPM: <span id="finalWpm">0</span></p>
+        <p>Accuracy: <span id="finalAccuracy">0%</span></p>
+        <p>Time: <span id="finalTime">0s</span></p>
+    </div>
+
+    <button id="tryAgain">Try Again</button>
+</div>
         </section>
     </main>
 

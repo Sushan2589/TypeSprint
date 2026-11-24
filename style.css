@@ -87,3 +87,43 @@ button {
 button:hover {
     background: #cccccc;
 }
+
+
+.quote span {
+    white-space: pre-wrap;
+}
+
+.quote .pending {
+    color: #777777;
+}
+
+.quote .correct {
+    color: #eeeeee;
+}
+
+.quote .incorrect {
+    color: #ef4444;
+}
+
+
+.results {
+    margin-top: 30px;
+    padding: 20px;
+    border-top: 1px solid #444;
+}
+
+.results h2 {
+    margin-bottom: 20px;
+    font-size: 22px;
+}
+
+.result-stats {
+    display: flex;
+    gap: 30px;
+    color: #aaaaaa;
+    margin-bottom: 20px;
+}
+
+.results button {
+    margin-top: 0;
+}
