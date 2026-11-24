@@ -1,0 +1,50 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TypeSprint — Typing Speed Test</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <header>
+        <h1>TypeSprint<span>.</span></h1>
+        <p>Test your typing speed.</p>
+    </header>
+
+    <main>
+        <section class="stats">
+            <div>
+                <p>WPM</p>
+                <h2 id="wpm">0</h2>
+            </div>
+            <div>
+                <p>Accuracy</p>
+                <h2 id="accuracy">100%</h2>
+            </div>
+            <div>
+                <p>Time</p>
+                <h2 id="timer">30</h2>
+            </div>
+        </section>
+
+        <section class="test-area">
+            <div id="text-display">
+                The quick brown fox jumps over the lazy dog.
+            </div>
+
+            <textarea
+                id="typing-input"
+                placeholder="Start typing here..."
+                disabled
+            ></textarea>
+        </section>
+
+        <button id="start-btn">Start Test</button>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>
