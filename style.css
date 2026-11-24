@@ -127,3 +127,16 @@ button:hover {
 .results button {
     margin-top: 0;
 }
+
+
+/*Blinking Cursor*/
+.quote span.current {
+    border-left: 2px solid white;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    50% {
+        border-color: transparent;
+    }
+}

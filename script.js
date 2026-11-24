@@ -98,6 +98,8 @@ function checkInput() {
     }
 
     characters.forEach((character, index) => {
+        character.className = "";
+
         if (index >= typedText.length) {
             character.className = "pending";
         } else if (typedText[index] === originalText[index]) {
@@ -105,6 +107,10 @@ function checkInput() {
         } else {
             character.className = "incorrect";
         }
+
+        if (index === typedText.length) {
+        character.classList.add("current");
+    }
     });
 
     updateStats();
