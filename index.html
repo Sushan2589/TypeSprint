@@ -9,40 +9,32 @@
 </head>
 <body>
 
-    <header>
-        <h1>TypeSprint<span>.</span></h1>
-        <p>Test your typing speed.</p>
-    </header>
+    <main class="container">
+        <header>
+            <h1>Type<span>Sprint</span></h1>
+            <p>Test your typing speed.</p>
+        </header>
 
-    <main>
-        <section class="stats">
-            <div>
-                <p>WPM</p>
-                <h2 id="wpm">0</h2>
+        <section class="test-box">
+            <div class="test-info">
+                <span id="timer">60s</span>
+                <span id="wpm">0 WPM</span>
+                <span id="accuracy">100% Accuracy</span>
             </div>
-            <div>
-                <p>Accuracy</p>
-                <h2 id="accuracy">100%</h2>
-            </div>
-            <div>
-                <p>Time</p>
-                <h2 id="timer">30</h2>
-            </div>
-        </section>
 
-        <section class="test-area">
-            <div id="text-display">
-                The quick brown fox jumps over the lazy dog.
+            <div id="quote" class="quote">
+                Loading your typing passage...
             </div>
 
             <textarea
-                id="typing-input"
+                id="input"
                 placeholder="Start typing here..."
                 disabled
+                spellcheck="false"
             ></textarea>
-        </section>
 
-        <button id="start-btn">Start Test</button>
+            <button id="restart">New Test ↻</button>
+        </section>
     </main>
 
     <script src="script.js"></script>
