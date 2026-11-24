@@ -1,4 +1,3 @@
-
 const quoteElement = document.getElementById("quote");
 const inputElement = document.getElementById("input");
 const restartButton = document.getElementById("restart");
@@ -13,161 +12,172 @@ const finalAccuracyElement = document.getElementById("finalAccuracy");
 const finalTimeElement = document.getElementById("finalTime");
 const tryAgainButton = document.getElementById("tryAgain");
 
+const highScoreElement = document.getElementById("highScore");
+
+let highScore = localStorage.getItem("highScore") || 0;
+
+highScoreElement.textContent = "High Score: " + highScore + " WPM";
+
 let originalText = "";
 let elapsedSeconds = 0;
 let timerInterval = null;
 let isRunning = false;
 let testEnded = false;
 
+import passages from "./passages.js";
+
 async function loadQuote() {
-    clearInterval(timerInterval);
+  clearInterval(timerInterval);
 
-    elapsedSeconds = 0;
-    isRunning = false;
-    testEnded = false;
+  elapsedSeconds = 0;
+  isRunning = false;
+  testEnded = false;
 
-    timerElement.textContent = "0s";
-    wpmElement.textContent = "0 WPM";
-    accuracyElement.textContent = "100% Accuracy";
+  timerElement.textContent = "0s";
+  wpmElement.textContent = "0 WPM";
+  accuracyElement.textContent = "100% Accuracy";
 
-    resultsElement.hidden = true;
-    inputElement.value = "";
-    inputElement.disabled = true;
+  resultsElement.hidden = true;
+  inputElement.value = "";
+  inputElement.disabled = true;
 
-    quoteElement.textContent = "Loading passage...";
+  quoteElement.textContent = "Loading passage...";
 
-    try {
-        const response = await fetch("https://dummyjson.com/quotes/random");
+  try {
+    const randomIndex = Math.floor(Math.random() * passages.length);
 
-        if (!response.ok) {
-            throw new Error("Failed to fetch quote");
-        }
 
-        const data = await response.json();
+    
+    originalText = passages[randomIndex];
 
-        originalText = data.quote;
+    displayQuote();
 
-        displayQuote();
-
-        inputElement.disabled = false;
-        inputElement.focus();
-
-    } catch (error) {
-        quoteElement.textContent = "Could not load passage. Try again.";
-        console.error(error);
-    }
+    inputElement.disabled = false;
+    inputElement.focus();
+  } catch (error) {
+    quoteElement.textContent = "Could not load passage. Try again.";
+    console.error(error);
+  }
 }
 
 function displayQuote() {
-    quoteElement.innerHTML = "";
+  quoteElement.innerHTML = "";
 
-    for (let i = 0; i < originalText.length; i++) {
-        const character = document.createElement("span");
+  for (let i = 0; i < originalText.length; i++) {
+    const character = document.createElement("span");
 
-        character.textContent = originalText[i];
-        character.className = "pending";
+    character.textContent = originalText[i];
+    character.className = "pending";
 
-        quoteElement.appendChild(character);
-    }
+    quoteElement.appendChild(character);
+  }
 }
 
 function startTimer() {
-    isRunning = true;
+  isRunning = true;
 
-    timerInterval = setInterval(() => {
-        elapsedSeconds++;
+  timerInterval = setInterval(() => {
+    elapsedSeconds++;
 
-        timerElement.textContent = elapsedSeconds + "s";
+    timerElement.textContent = elapsedSeconds + "s";
 
-        updateStats();
+    updateStats();
 
-        if (elapsedSeconds >= 60) {
-            endTest();
-        }
-    }, 1000);
+    if (elapsedSeconds >= 60) {
+      endTest();
+    }
+  }, 1000);
 }
 
 function checkInput() {
-    if (testEnded) return;
+  if (testEnded) return;
 
-    const typedText = inputElement.value;
-    const characters = quoteElement.querySelectorAll("span");
+  const typedText = inputElement.value;
+  const characters = quoteElement.querySelectorAll("span");
 
-    if (!isRunning && typedText.length > 0) {
-        startTimer();
+  if (!isRunning && typedText.length > 0) {
+    startTimer();
+  }
+
+  characters.forEach((character, index) => {
+    character.className = "";
+
+    if (index >= typedText.length) {
+      character.className = "pending";
+    } else if (typedText[index] === originalText[index]) {
+      character.className = "correct";
+    } else {
+      character.className = "incorrect";
     }
 
-    characters.forEach((character, index) => {
-        character.className = "";
-
-        if (index >= typedText.length) {
-            character.className = "pending";
-        } else if (typedText[index] === originalText[index]) {
-            character.className = "correct";
-        } else {
-            character.className = "incorrect";
-        }
-
-        if (index === typedText.length) {
-        character.classList.add("current");
+    if (index === typedText.length) {
+      character.classList.add("current");
     }
-    });
+  });
 
-    updateStats();
+  updateStats();
 
-    if (typedText.length >= originalText.length) {
-        endTest();
-    }
+  if (typedText.length >= originalText.length) {
+    endTest();
+  }
 }
 
 function updateStats() {
-    const typedText = inputElement.value;
+  const typedText = inputElement.value;
 
-    let correctCharacters = 0;
+  let correctCharacters = 0;
 
-    for (let i = 0; i < typedText.length; i++) {
-        if (typedText[i] === originalText[i]) {
-            correctCharacters++;
-        }
+  for (let i = 0; i < typedText.length; i++) {
+    if (typedText[i] === originalText[i]) {
+      correctCharacters++;
     }
+  }
 
-    const minutes = elapsedSeconds / 60;
+  const minutes = elapsedSeconds / 60;
 
-    let wpm = 0;
+  let wpm = 0;
 
-    if (minutes > 0) {
-        wpm = Math.round((correctCharacters / 5) / minutes);
-    }
+  if (minutes > 0) {
+    wpm = Math.round(correctCharacters / 5 / minutes);
+  }
 
-    let accuracy = 100;
+  let accuracy = 100;
 
-    if (typedText.length > 0) {
-        accuracy = Math.round(
-            (correctCharacters / typedText.length) * 100
-        );
-    }
+  if (typedText.length > 0) {
+    accuracy = Math.round((correctCharacters / typedText.length) * 100);
+  }
 
-    wpmElement.textContent = wpm + " WPM";
-    accuracyElement.textContent = accuracy + "% Accuracy";
+  wpmElement.textContent = wpm + " WPM";
+  accuracyElement.textContent = accuracy + "% Accuracy";
 }
 
 function endTest() {
-    if (testEnded) return;
+  if (testEnded) return;
 
-    clearInterval(timerInterval);
+  clearInterval(timerInterval);
 
-    isRunning = false;
-    testEnded = true;
+  isRunning = false;
+  testEnded = true;
 
-    inputElement.disabled = true;
+  inputElement.disabled = true;
 
-    updateStats();
+  updateStats();
 
-    finalWpmElement.textContent = wpmElement.textContent;
-    finalAccuracyElement.textContent = accuracyElement.textContent;
-    finalTimeElement.textContent = elapsedSeconds + "s";
+  const currentWpm = parseInt(wpmElement.textContent);
 
-    resultsElement.hidden = false;
+  if (currentWpm > highScore) {
+    highScore = currentWpm;
+
+    localStorage.setItem("highScore", highScore);
+
+    highScoreElement.textContent = "High Score: " + highScore + " WPM";
+  }
+
+  finalWpmElement.textContent = wpmElement.textContent;
+  finalAccuracyElement.textContent = accuracyElement.textContent;
+  finalTimeElement.textContent = elapsedSeconds + "s";
+
+  resultsElement.hidden = false;
 }
 
 inputElement.addEventListener("input", checkInput);
